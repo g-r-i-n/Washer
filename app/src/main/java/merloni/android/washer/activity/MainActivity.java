@@ -278,19 +278,22 @@ public class MainActivity extends Activity {
             while (true) {
                 try {
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
                     Log.d(TAG, "Managed4");
+                    bytes = mmInStream.read(buffer);
+                    Log.d(TAG, "Managed5. " + bytes + " bytes.");
+                    Log.d(TAG, new String(buffer));
                     // Send the obtained bytes to the UI activity
 ///                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d(TAG, "Managed5");
-                            ((Button)findViewById(R.id.send)).setText(new String(buffer));
                             Log.d(TAG, "Managed6");
+                            ((Button)findViewById(R.id.send)).setText(new String(buffer));
+                            Log.d(TAG, "Managed7");
                         }
                     });
                 } catch (IOException e) {
+                    e.printStackTrace();
                     break;
                 }
             }
