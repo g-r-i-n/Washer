@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">Washer</string>
+    <string name="read">Read</string>
+    <string name="write">Write</string>
+    <string name="send">Send</string>
+    <string name="connect">Connect</string>
+    <string name="search">Search more..</string>
+    <string name="bt_not_supported">Bluetooth is not available on your device</string>
+
+</resources>
