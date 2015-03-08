@@ -20,6 +20,9 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
     private static final String PACK_13 = "a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
     private static final String PACK_2 = "a5 ee 02 93 10 05 0c 1d 80 94 0f 89";
     private static final String PACK_3 = "a5 ee 02 93 10 05 0c 10 36 37 00 c6";
+    private static final String PACK_4 = "a5 ee 02 93 10 05 0c 10 ec ee 00 33";
+    private static final String PACK_5 = "a5 ee 02 93 20 05 0c 20 00 db 00 54";
+    private static final String PACK_6 = "a5 ee 02 91 30 05 a0 00 00 3f 00 3a";
 
     public static final int FILE_CHOOSING = 1002;
     private static final String TAG = ReadActivity.class.getSimpleName();
@@ -75,6 +78,15 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
             WasherManager.getInstance().sendPackage(pack);
         } else if (p.getStringToSend().equals(PACK_2)) {
             pack = new Package(PACK_3);
+            WasherManager.getInstance().sendPackage(pack);
+        } else if (p.getStringToSend().equals(PACK_3)) {
+            pack = new Package(PACK_4);
+            WasherManager.getInstance().sendPackage(pack);
+        } else if (p.getStringToSend().equals(PACK_4)) {
+            pack = new Package(PACK_5);
+            WasherManager.getInstance().sendPackage(pack);
+        } else if (p.getStringToSend().equals(PACK_5)) {
+            pack = new Package(PACK_6);
             WasherManager.getInstance().sendPackage(pack);
         }
     }
