@@ -3,15 +3,8 @@
     xmlns:fontify="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="4"
+    android:weightSum="3"
     android:orientation="vertical">
-
-    <Button
-        android:id="@+id/connect"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="@string/connect"/>
 
     <Button
         android:id="@+id/read"
@@ -28,10 +21,10 @@
         android:text="@string/write"/>
 
     <Button
-        android:id="@+id/send"
+        android:id="@+id/connect"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="@string/send"/>
+        android:text="@string/connect"/>
 
 </LinearLayout>

@@ -20,38 +20,40 @@ import java.util.Set;
 import java.util.UUID;
 
 import merloni.android.washer.R;
+import merloni.android.washer.util.BTManager;
 
 /**
  * Created by Ivan Grinichenko on 21.02.2015.
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity implements BTManager.BluetoothExchangeListener {
 
     public static final int CODE = 1002;
 
+    private BTManager btManager;
+
     private boolean receiverRegistered;
 
-    private BluetoothAdapter bluetoothAdapter;
-    private ArrayAdapter arrayAdapter;
     private ListView listView;
 
-    private String curDeviceAddress;
-    private Intent result;
     private BTBroadcastReceiver receiverNewDevice;
     private BTBroadcastReceiver receiverFinishSearch;
+    private String curDeviceAddress;
+    private Intent result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
+        btManager = BTManager.getInstance();
+        if (!btManager.isBTSupported()) {
             setContentView(R.layout.activity_search_no_bt);
         } else {
             setContentView(R.layout.activity_search);
+            BTManager.getInstance().listener = this;
             listView = (ListView)findViewById(R.id.list);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String item = (String)arrayAdapter.getItem(position);
+                    String item = (String)BTManager.getInstance().arrayAdapter.getItem(position);
                     curDeviceAddress = item.substring(item.lastIndexOf("\n") + 1);
                     result = new Intent();
                     result.putExtra("mac", curDeviceAddress);
@@ -69,7 +71,7 @@ public class SearchActivity extends Activity {
                     search();
                 }
             });
-            if (bluetoothAdapter.isEnabled()) {
+            if (BTManager.getInstance().bluetoothAdapter.isEnabled()) {
                 start();
             } else {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -85,10 +87,10 @@ public class SearchActivity extends Activity {
     }
 
     private void start() {
-        arrayAdapter = new ArrayAdapter(this, R.layout.item_device, R.id.device);
-        listView.setAdapter(arrayAdapter);
-        if (loadBondedDevices()) {
-            arrayAdapter.notifyDataSetChanged();
+        BTManager.getInstance().arrayAdapter = new ArrayAdapter(this, R.layout.item_device, R.id.device);
+        listView.setAdapter(BTManager.getInstance().arrayAdapter);
+        if (BTManager.getInstance().loadBondedDevices()) {
+            BTManager.getInstance().arrayAdapter.notifyDataSetChanged();
         } else {
             search();
         }
@@ -96,8 +98,8 @@ public class SearchActivity extends Activity {
 
     private void search() {
         findViewById(R.id.general_progress).setVisibility(View.VISIBLE);
-        if (bluetoothAdapter.isDiscovering()) {
-            bluetoothAdapter.cancelDiscovery();
+        if (BTManager.getInstance().isDiscovering()) {
+            BTManager.getInstance().cancelDiscovery();
         }
         if (!receiverRegistered) {
             receiverNewDevice = new BTBroadcastReceiver();
@@ -108,18 +110,26 @@ public class SearchActivity extends Activity {
 //            arrayAdapter.add("start");
 //            arrayAdapter.notifyDataSetChanged();
         }
-        bluetoothAdapter.startDiscovery();
+        BTManager.getInstance().startDiscovery();
     }
 
-    private boolean loadBondedDevices() {
-        Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        if (pairedDevices.size() > 0) {
-            for (BluetoothDevice device : pairedDevices) {
-                arrayAdapter.add(device.getName() + "\n" + device.getAddress());
+    private class BTBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            // When discovery finds a device
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Get the BluetoothDevice object from the Intent
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                // Add the name and address to an array adapter to show in a ListView
+                BTManager.getInstance().arrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                BTManager.getInstance().arrayAdapter.notifyDataSetChanged();
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                onSearchFinished();
             }
         }
-        return arrayAdapter.getCount() > 0;
-    }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,35 +137,49 @@ public class SearchActivity extends Activity {
         start();
     }
 
-    // Create a BroadcastReceiver for ACTION_FOUND
-    private class BTBroadcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-//            arrayAdapter.add("work");
-//            arrayAdapter.notifyDataSetChanged();
-            String action = intent.getAction();
-            // When discovery finds a device
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // Add the name and address to an array adapter to show in a ListView
-                arrayAdapter.add(device.getName() + "\n" + device.getAddress());
-                arrayAdapter.notifyDataSetChanged();
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                findViewById(R.id.general_progress).setVisibility(View.GONE);
-            }
-        }
-    };
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        bluetoothAdapter.cancelDiscovery();
+        BTManager.getInstance().listener = null;
+        BTManager.getInstance().cancelDiscovery();
         if (receiverRegistered) {
             unregisterReceiver(receiverNewDevice);
             unregisterReceiver(receiverFinishSearch);
         }
     }
 
+    @Override
+    public void onSearchFinished() {
+        findViewById(R.id.general_progress).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSearchError(String text) {
+        findViewById(R.id.general_progress).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void oDataSent() {
+
+    }
+
+    @Override
+    public void onReceiveData(byte[] values, int bytes) {
+
+    }
+
+    @Override
+    public void onDataSendingError(String text) {
+
+    }
+
+    @Override
+    public void onGeneralError(String text) {
+
+    }
+
+    @Override
+    public void onDeviceDisconnected() {
+
+    }
 }

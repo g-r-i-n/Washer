@@ -28,6 +28,16 @@
             android:configChanges="orientation|keyboardHidden|screenSize" >
         </activity>
 
+        <activity
+            android:name=".activity.WriteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+
+        <activity
+            android:name=".activity.ReadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
+        </activity>
+
 
     </application>
 
