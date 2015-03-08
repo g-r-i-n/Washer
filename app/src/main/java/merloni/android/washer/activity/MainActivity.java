@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import merloni.android.washer.R;
+import merloni.android.washer.model.*;
 import merloni.android.washer.util.BTManager;
 
 /**
@@ -88,7 +89,7 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
     }
 
     @Override
-    public void onReceiveData(byte[] values, int bytes) {
+    public void onReceiveData(merloni.android.washer.model.Package pack) {
 
     }
 

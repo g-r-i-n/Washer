@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
+import merloni.android.washer.model.*;
+import merloni.android.washer.model.Package;
+
 /**
  * Created by Ivan Grinichenko on 25.02.2015.
  */
@@ -32,6 +35,7 @@ public class BTManager implements AbstractManager {
     private static final int MESSAGE_READ = 1;
 
     private static BTManager instance;
+    private merloni.android.washer.model.Package curPackage;
 
     public ArrayAdapter arrayAdapter;
     public BluetoothExchangeListener listener;
@@ -59,11 +63,11 @@ public class BTManager implements AbstractManager {
         return instance;
     }
 
-    public void sendToCurrentDevice(byte[] values) {
+    private void sendToCurrentDevice(byte[] values) {
         sendToDevice(currentBluetoothDevice, values);
     }
 
-    public void sendToDevice(BluetoothDevice device, byte[] values) {
+    private void sendToDevice(BluetoothDevice device, byte[] values) {
         if (connectedThread != null) {
             connectedThread.write(values);
         } else {
@@ -95,7 +99,8 @@ public class BTManager implements AbstractManager {
         public void onSearchFinished();
         public void onSearchError(String text);
         public void oDataSent();
-        public void onReceiveData(byte[] values, int bytes);
+//        public void onReceiveData(byte[] values, int bytes);
+        public void onReceiveData(Package pack);
         public void onDataSendingError(String text);
         public void onGeneralError(String text);
         void onDeviceDisconnected();
@@ -306,7 +311,7 @@ public class BTManager implements AbstractManager {
                         bytes = mmInStream.read(buffer);
                         Log.d(TAG, "Managed5. " + bytes + " bytes.");
                         Log.d(TAG, new String(buffer, 0, bytes));
-                        listener.onReceiveData(buffer, bytes);
+                        listener.onReceiveData(curPackage);
                         // Send the obtained bytes to the UI activity
                         ///                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
 //                    } else {
@@ -413,4 +418,10 @@ public class BTManager implements AbstractManager {
             acceptThread = null;
         }
     }
+
+    public void sendPackage(merloni.android.washer.model.Package pack) {
+        curPackage = pack;
+        sendToCurrentDevice(curPackage.bytesToSend);
+    }
+
 }

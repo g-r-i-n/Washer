@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import merloni.android.washer.R;
+import merloni.android.washer.model.*;
 import merloni.android.washer.util.BTManager;
 
 /**
@@ -90,7 +91,7 @@ public class WriteActivity extends Activity implements BTManager.BluetoothExchan
     }
 
     @Override
-    public void onReceiveData(byte[] values, int bytes) {
+    public void onReceiveData(merloni.android.washer.model.Package pack) {
 
     }
 

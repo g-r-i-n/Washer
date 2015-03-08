@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import merloni.android.washer.R;
+import merloni.android.washer.model.*;
 import merloni.android.washer.util.BTManager;
 
 /**
@@ -164,7 +165,7 @@ public class SearchActivity extends Activity implements BTManager.BluetoothExcha
     }
 
     @Override
-    public void onReceiveData(byte[] values, int bytes) {
+    public void onReceiveData(merloni.android.washer.model.Package pack) {
 
     }
 

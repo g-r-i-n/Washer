@@ -1,24 +1,29 @@
 package merloni.android.washer.activity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import merloni.android.washer.R;
+import merloni.android.washer.model.Package;
 import merloni.android.washer.util.BTManager;
+import merloni.android.washer.util.WasherManager;
 
 /**
  * Created by Ivan Grinichenko on 21.02.2015.
  */
 public class ReadActivity extends Activity implements BTManager.BluetoothExchangeListener {
 
+    private static final String PACK_1 = "a5 ee 02 95 49 02 90 24 29 a5 ee 02 93 10 05 0c 10 f1 f1 00 3b a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
+    private static final String PACK_2 = "a5 ee 02 93 10 05 0c 1d 80 94 0f 89";
+    private static final String PACK_3 = "a5 ee 02 93 10 05 0c 10 36 37 00 c6";
+
     public static final int FILE_CHOOSING = 1002;
     private static final String TAG = ReadActivity.class.getSimpleName();
+
+    private TextView data;
+    private merloni.android.washer.model.Package pack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,29 +31,20 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
         setContentView(R.layout.activity_read);
         BTManager.getInstance().listener = this;
         BTManager.getInstance().startClientMode();
-        findViewById(R.id.read).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((TextView)findViewById(R.id.text)).setText("Sending STARTED!");
-                String value = "a5 ee 02 95 49 02 90 24 29";
-                BTManager.getInstance().sendToCurrentDevice(stringToBytes(value));
-                value = "a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
-                BTManager.getInstance().sendToCurrentDevice(stringToBytes(value));
-                value = "a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
-                BTManager.getInstance().sendToCurrentDevice(stringToBytes(value));
-            }
-        });
+        data = (TextView)findViewById(R.id.text);
+//        startExchange();
+        pack = new Package(PACK_1);
+        WasherManager.getInstance().sendPackage(pack);
     }
 
-    public byte[] stringToBytes(String value) {
-        int size = (value.length() + 1) / 3;
-        byte[] result = new byte[size];
-        for (int i = 0; i < size; i++) {
-            result[i] = (byte) ((Character.digit(value.charAt(i * 3), 16) << 4) + Character.digit(value.charAt(i * 3 + 1), 16));
-            Log.d(TAG, "Cur byte: " + result[i]);
-        }
-        return result;
-    }
+//    private void startExchange() {
+//        pack = new Package("a5 ee 02 95 49 02 90 24 29");
+//        WasherManager.getInstance().sendPackage(pack);
+//        pack = new Package("a5 ee 02 93 10 05 0c 10 f1 f1 00 3b");
+//        WasherManager.getInstance().sendPackage(pack);
+//        pack = new Package("a5 ee 02 93 10 05 0c 10 f1 f1 00 3b");
+//        WasherManager.getInstance().sendPackage(pack);
+//    }
 
     @Override
     public void onSearchFinished() {
@@ -66,8 +62,16 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
     }
 
     @Override
-    public void onReceiveData(byte[] values, int bytes) {
-        Log.d(TAG, "Received data: " + new String(values));
+    public void onReceiveData(Package pack) {
+        Log.d(TAG, "Received data: " + pack.stringToRead);
+        data.setText(pack.stringToRead + "\n\n");
+        if (pack.getStringToSend().equals(PACK_1)) {
+            pack = new Package(PACK_2);
+            WasherManager.getInstance().sendPackage(pack);
+        } else if (pack.getStringToSend().equals(PACK_2)) {
+            pack = new Package(PACK_3);
+            WasherManager.getInstance().sendPackage(pack);
+        }
     }
 
     @Override
