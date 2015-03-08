@@ -99,6 +99,7 @@ public class BTManager implements AbstractManager {
         public void onDataSendingError(String text);
         public void onGeneralError(String text);
         void onDeviceDisconnected();
+        void onDeviceConnected();
     }
 
 
@@ -234,6 +235,7 @@ public class BTManager implements AbstractManager {
             try {
                 // Connect the device through the socket. This will block
                 // until it succeeds or throws an exception
+                listener.onDeviceConnected();
                 socket.connect();
                 Log.d(TAG, "Connected1");
             } catch (IOException connectException) {
@@ -241,7 +243,6 @@ public class BTManager implements AbstractManager {
                 // Unable to connect; close the socket and get out
                 try {
                     socket.close();
-                    stopBT();
                     Log.d(TAG, "Connected2");
                 } catch (IOException closeException) {
                     closeException.printStackTrace();

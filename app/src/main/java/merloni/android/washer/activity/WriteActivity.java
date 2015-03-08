@@ -109,4 +109,9 @@ public class WriteActivity extends Activity implements BTManager.BluetoothExchan
 
     }
 
+    @Override
+    public void onDeviceConnected() {
+
+    }
+
 }

@@ -182,4 +182,9 @@ public class SearchActivity extends Activity implements BTManager.BluetoothExcha
     public void onDeviceDisconnected() {
 
     }
+
+    @Override
+    public void onDeviceConnected() {
+
+    }
 }

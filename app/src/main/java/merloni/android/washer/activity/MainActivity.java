@@ -56,7 +56,6 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
                 name = data.getStringExtra("name");
                 BTManager.getInstance().listener = this;
                 BTManager.getInstance().setCurrentDevice(mac);
-                BTManager.getInstance().startClientMode();
             }
         }
     }
@@ -105,6 +104,11 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
 
     @Override
     public void onDeviceDisconnected() {
+
+    }
+
+    @Override
+    public void onDeviceConnected() {
 
     }
 }
