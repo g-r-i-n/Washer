@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-import merloni.android.washer.model.*;
 import merloni.android.washer.model.Package;
 
 /**
@@ -49,6 +48,7 @@ public class BTManager implements AbstractManager {
 //    private ConnectThread connectThreadWrite;
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
+    private boolean deviceConnected;
 
 
     private BTManager() {
@@ -240,7 +240,6 @@ public class BTManager implements AbstractManager {
             try {
                 // Connect the device through the socket. This will block
                 // until it succeeds or throws an exception
-                listener.onDeviceConnected();
                 socket.connect();
                 Log.d(TAG, "Connected1");
             } catch (IOException connectException) {
@@ -308,9 +307,14 @@ public class BTManager implements AbstractManager {
 //                    if (path == null) {
                         // Read from the InputStream
                         Log.d(TAG, "Managed4");
+                        if (!deviceConnected) {
+                            deviceConnected = true;
+                            listener.onDeviceConnected();
+                        }
                         bytes = mmInStream.read(buffer);
                         Log.d(TAG, "Managed5. " + bytes + " bytes.");
                         Log.d(TAG, new String(buffer, 0, bytes));
+                        curPackage.initDataToRead(buffer, 0, bytes);
                         listener.onReceiveData(curPackage);
                         // Send the obtained bytes to the UI activity
                         ///                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();

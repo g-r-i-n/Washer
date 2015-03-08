@@ -15,7 +15,9 @@ import merloni.android.washer.util.WasherManager;
  */
 public class ReadActivity extends Activity implements BTManager.BluetoothExchangeListener {
 
-    private static final String PACK_1 = "a5 ee 02 95 49 02 90 24 29 a5 ee 02 93 10 05 0c 10 f1 f1 00 3b a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
+    private static final String PACK_11 = "a5 ee 02 95 49 02 90 24 29";
+    private static final String PACK_12 = "a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
+    private static final String PACK_13 = "a5 ee 02 93 10 05 0c 10 f1 f1 00 3b";
     private static final String PACK_2 = "a5 ee 02 93 10 05 0c 1d 80 94 0f 89";
     private static final String PACK_3 = "a5 ee 02 93 10 05 0c 10 36 37 00 c6";
 
@@ -33,8 +35,6 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
         BTManager.getInstance().startClientMode();
         data = (TextView)findViewById(R.id.text);
 //        startExchange();
-        pack = new Package(PACK_1);
-        WasherManager.getInstance().sendPackage(pack);
     }
 
 //    private void startExchange() {
@@ -62,13 +62,18 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
     }
 
     @Override
-    public void onReceiveData(Package pack) {
-        Log.d(TAG, "Received data: " + pack.stringToRead);
-        data.setText(pack.stringToRead + "\n\n");
-        if (pack.getStringToSend().equals(PACK_1)) {
+    public void onReceiveData(final Package p) {
+        Log.d(TAG, "Received data: " + p.stringToRead);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                data.setText(data.getText().toString() + p.stringToRead + "\n\n");
+            }
+        });
+        if (p.getStringToSend().equals(PACK_13)) {
             pack = new Package(PACK_2);
             WasherManager.getInstance().sendPackage(pack);
-        } else if (pack.getStringToSend().equals(PACK_2)) {
+        } else if (p.getStringToSend().equals(PACK_2)) {
             pack = new Package(PACK_3);
             WasherManager.getInstance().sendPackage(pack);
         }
@@ -91,6 +96,12 @@ public class ReadActivity extends Activity implements BTManager.BluetoothExchang
 
     @Override
     public void onDeviceConnected() {
+        pack = new Package(PACK_11);
+        WasherManager.getInstance().sendPackage(pack);
+        pack = new Package(PACK_12);
+        WasherManager.getInstance().sendPackage(pack);
+        pack = new Package(PACK_13);
+        WasherManager.getInstance().sendPackage(pack);
     }
 
     @Override
