@@ -3,8 +3,6 @@ package merloni.android.washer.activity;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.UUID;
-
 import merloni.android.washer.R;
-import merloni.android.washer.model.*;
 import merloni.android.washer.util.BTManager;
 
 /**
@@ -127,7 +120,7 @@ public class SearchActivity extends Activity implements BTManager.BluetoothExcha
                 BTManager.getInstance().arrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 BTManager.getInstance().arrayAdapter.notifyDataSetChanged();
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                onSearchFinished();
+                onBtSearchFinished();
             }
         }
     };
@@ -150,42 +143,42 @@ public class SearchActivity extends Activity implements BTManager.BluetoothExcha
     }
 
     @Override
-    public void onSearchFinished() {
+    public void onBtSearchFinished() {
         findViewById(R.id.general_progress).setVisibility(View.GONE);
     }
 
     @Override
-    public void onSearchError(String text) {
+    public void onBtSearchError(String text) {
         findViewById(R.id.general_progress).setVisibility(View.GONE);
     }
 
     @Override
-    public void oDataSent() {
+    public void onBtDataSent() {
 
     }
 
     @Override
-    public void onReceiveData(merloni.android.washer.model.Package pack) {
+    public void onBtReceiveData(merloni.android.washer.model.Package pack) {
 
     }
 
     @Override
-    public void onDataSendingError(String text) {
+    public void onBtDataSendingError(String text) {
 
     }
 
     @Override
-    public void onGeneralError(String text) {
+    public void onBtGeneralError(String text) {
 
     }
 
     @Override
-    public void onDeviceDisconnected() {
+    public void onBtDeviceDisconnected() {
 
     }
 
     @Override
-    public void onDeviceConnected() {
+    public void onBtDeviceConnected() {
 
     }
 }

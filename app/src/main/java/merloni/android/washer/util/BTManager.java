@@ -71,7 +71,7 @@ public class BTManager implements AbstractManager {
         if (connectedThread != null) {
             connectedThread.write(values);
         } else {
-            listener.onDeviceDisconnected();
+            listener.onBtDeviceDisconnected();
         }
     }
 
@@ -96,15 +96,15 @@ public class BTManager implements AbstractManager {
 
     public interface BluetoothExchangeListener {
 
-        public void onSearchFinished();
-        public void onSearchError(String text);
-        public void oDataSent();
-//        public void onReceiveData(byte[] values, int bytes);
-        public void onReceiveData(Package pack);
-        public void onDataSendingError(String text);
-        public void onGeneralError(String text);
-        void onDeviceDisconnected();
-        void onDeviceConnected();
+        public void onBtSearchFinished();
+        public void onBtSearchError(String text);
+        public void onBtDataSent();
+//        public void onBtReceiveData(byte[] values, int bytes);
+        public void onBtReceiveData(Package pack);
+        public void onBtDataSendingError(String text);
+        public void onBtGeneralError(String text);
+        void onBtDeviceDisconnected();
+        void onBtDeviceConnected();
     }
 
 
@@ -225,7 +225,7 @@ public class BTManager implements AbstractManager {
                     tmp = device.createRfcommSocketToServiceRecord(phoneUuids[0].getUuid());
                     Log.d(TAG, "Connecting2");
                 } else {
-                    listener.onGeneralError("Unknown UUID");
+                    listener.onBtGeneralError("Unknown UUID");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -309,13 +309,13 @@ public class BTManager implements AbstractManager {
                         Log.d(TAG, "Managed4");
                         if (!deviceConnected) {
                             deviceConnected = true;
-                            listener.onDeviceConnected();
+                            listener.onBtDeviceConnected();
                         }
                         bytes = mmInStream.read(buffer);
                         Log.d(TAG, "Managed5. " + bytes + " bytes.");
                         Log.d(TAG, new String(buffer, 0, bytes));
                         curPackage.initDataToRead(buffer, 0, bytes);
-                        listener.onReceiveData(curPackage);
+                        listener.onBtReceiveData(curPackage);
                         // Send the obtained bytes to the UI activity
                         ///                    handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
 //                    } else {

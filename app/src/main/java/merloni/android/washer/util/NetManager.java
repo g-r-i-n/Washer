@@ -16,7 +16,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +30,8 @@ public class NetManager {
 
     private static final String TAG = NetManager.class.getSimpleName();
 	
-	public static final String SERVER_ADDRESS = "http://services-t.my-lexoverheid.nl/rest/ipad";
-//public static final String SERVER_ADDRESS = "http://10.0.2.2/MyLex";
-//public static final String SERVER_ADDRESS = "http://corpuscul.parseapp.com";
+//	public static final String SERVER_ADDRESS = "sw19.ru/online/scanmerloni/android.php";
+public static final String SERVER_ADDRESS = "http://10.0.2.2/washer";
 	protected static final int DEFAULT_BUILDER_CAPACITY = 65536;
 	public static final int SOCKET_TIMEOUT_IN_MILLIS = 10000;
 	public static final int CONNECTION_TIMEOUT_IN_MILLIS = 10000;
@@ -157,5 +158,60 @@ public class NetManager {
         }
     }
 
+//    private void sendFileByPostReceiveText(NetPackage np) {
+////    	String lineEnd = "\r\n";
+////    	String twoHyphens = "--";
+////    	String boundary =  "*****";
+//        int maxBufferSize = 128 * 1024;
+//        try {
+//            URL url = new URL(sendingAddress);
+//            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+//            connection.setDoInput(true);
+//            connection.setDoOutput(true);
+//            connection.setUseCaches(false);
+//            connection.setRequestMethod("POST");
+/////			connection.setRequestProperty("Connection", "Keep-Alive");
+/////			connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+//
+//            DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+/////			outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+//////			outputStream.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + file.getFullName() +"\"" + lineEnd);
+/////			outputStream.writeBytes(np.getScriptParams());
+////			outputStream.writeBytes("Content-Disposition: form-data; " + np.getScriptParams() + lineEnd);//			outputStream.writeBytes("Content-Disposition: form-data; " + np.getScriptParams() + lineEnd);
+/////			outputStream.writeBytes(lineEnd);
+//
+//            FIle file = (FIle)np.getData(0);
+//            FileInputStream fileInputStream = new FileInputStream(new File(file.getPathAndName()));
+//            int bytesAvailable = fileInputStream.available();
+//            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+//            byte[] buffer = new byte[bufferSize];
+//            int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+//
+//            while (bytesRead > 0) {
+//                outputStream.write(buffer, 0, bufferSize);
+//                bytesAvailable = fileInputStream.available();
+//                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+//                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+//            }
+/////			outputStream.writeBytes(lineEnd);
+/////			outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+//            int serverResponseCode = connection.getResponseCode();
+//            String serverResponseMessage = connection.getResponseMessage();
+//            System.out.println("serverResponseMessage: " + serverResponseMessage + ". serverResponseCode = " + serverResponseCode);
+//            fileInputStream.close();
+//            outputStream.flush();
+//            outputStream.close();
+//
+////			DataInputStream inputStream = new DataInputStream(connection.getInputStream());
+//            StringBuffer result = new StringBuffer();
+//            InputStream is = connection.getInputStream();
+//            readStream(is, result);
+//            is.close();
+//            connection.disconnect();
+//            np.setResultText(result);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 }

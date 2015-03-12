@@ -7,15 +7,14 @@ import merloni.android.washer.model.Sendable;
  */
 public interface ServerAnswerListener {
 
-    //TODO: rename the message
     /*
      * 	If error occured while server exchange
      */
-    public void onError(Sendable caller, String value);
+    public void onServerError(Sendable caller, String message);
 
     /*
      * If server returned ok, but answer format is wrong or other mistakes occured then @param ok is false
      */
-    public void onLoaded(Sendable caller, boolean ok);
+    public void onServerLoaded(Sendable caller, boolean ok);
 
 }

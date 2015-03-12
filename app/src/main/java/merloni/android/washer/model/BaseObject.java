@@ -6,7 +6,6 @@ import android.util.Log;
 import org.apache.http.protocol.HTTP;
 
 import java.io.Reader;
-import java.io.StringReader;
 import java.text.ParseException;
 
 import merloni.android.washer.util.NetManager;
@@ -64,7 +63,7 @@ public class BaseObject implements Sendable {
                         if (xmlData != null) {
                             Log.e(TAG, "XML: " + xmlData);
                         }
-                        listener.onError(BaseObject.this, e.getMessage());
+                        listener.onServerError(BaseObject.this, e.getMessage());
                     }
                 }
             }).start();
@@ -75,9 +74,6 @@ public class BaseObject implements Sendable {
 
     //TODO: replace String with StringBuffer
     protected String prepareXml(String xml) {
-        xml = xml.replace("﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
-        xml = xml.replaceAll("&","&amp;");
-        ///xml = xml.replaceAll("?","&#63;");
         return xml;
     }
 
@@ -108,13 +104,13 @@ public class BaseObject implements Sendable {
     @Override
     public void onReceive() {
         try {
-            listener.onLoaded(this, true);
+            listener.onServerLoaded(this, true);
         } catch (Exception e) {
             e.printStackTrace();
             if (xmlData != null) {
                 Log.d(TAG, "XML: " + xmlData);
             }
-            listener.onLoaded(this, false);
+            listener.onServerLoaded(this, false);
         }
     }
 

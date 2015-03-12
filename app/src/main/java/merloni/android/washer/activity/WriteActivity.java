@@ -76,42 +76,42 @@ public class WriteActivity extends Activity implements BTManager.BluetoothExchan
     }
 
     @Override
-    public void onSearchFinished() {
+    public void onBtSearchFinished() {
 
     }
 
     @Override
-    public void onSearchError(String text) {
+    public void onBtSearchError(String text) {
 
     }
 
     @Override
-    public void oDataSent() {
+    public void onBtDataSent() {
 
     }
 
     @Override
-    public void onReceiveData(merloni.android.washer.model.Package pack) {
+    public void onBtReceiveData(merloni.android.washer.model.Package pack) {
 
     }
 
     @Override
-    public void onDataSendingError(String text) {
+    public void onBtDataSendingError(String text) {
 
     }
 
     @Override
-    public void onGeneralError(String text) {
+    public void onBtGeneralError(String text) {
 
     }
 
     @Override
-    public void onDeviceDisconnected() {
+    public void onBtDeviceDisconnected() {
 
     }
 
     @Override
-    public void onDeviceConnected() {
+    public void onBtDeviceConnected() {
 
     }
 

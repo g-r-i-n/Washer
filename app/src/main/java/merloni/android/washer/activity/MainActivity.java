@@ -7,15 +7,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.ParseException;
+
 import merloni.android.washer.R;
 import merloni.android.washer.model.*;
 import merloni.android.washer.model.Package;
 import merloni.android.washer.util.BTManager;
+import merloni.android.washer.util.FIle;
+import merloni.android.washer.util.FilesManager;
+import merloni.android.washer.util.NoInternetConnectionException;
+import merloni.android.washer.util.ServerAnswerListener;
 
 /**
  * Created by Ivan Grinichenko on 21.02.2015.
  */
-public class MainActivity extends Activity implements BTManager.BluetoothExchangeListener {
+public class MainActivity extends Activity implements BTManager.BluetoothExchangeListener, ServerAnswerListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int BT_SEARCH = 1001;
@@ -45,9 +51,41 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SearchActivity.class));
-            }
+                }
         });
         startActivityForResult(new Intent(MainActivity.this, SearchActivity.class), BT_SEARCH);
+
+//        final String SEND_CONST = "A5 EE 02 91 30 05 A0";
+//        byte[] bytes = Package.hexStringToBytes(SEND_CONST);
+//        final byte CONTROL_SUMM_BASE_CONST = (byte)(bytes[0] + bytes[1] + bytes[2] + bytes[3] + bytes[4] + bytes[5] + bytes[6]);
+//        String toSend = "";
+//        int num = 16 * 256 / 64;
+//        for (byte i = 0; i < num; i++) {
+//            byte b = (byte)(i * 64 % 256);
+//            byte controlSumm = (byte)(CONTROL_SUMM_BASE_CONST + b);
+//            toSend += " " + Package.byteToHexString(b);
+//            b = (byte)(i / 4);
+//            controlSumm += b;
+//            toSend += " " + Package.byteToHexString(b);
+//            b = (byte)(((i + 1) * 64 - 1) % 256);
+//            controlSumm += b;
+//            toSend += " " + Package.byteToHexString(b);
+//            b = (byte)(((i + 1) * 64 - 1) / 256);
+//            controlSumm += b;
+//            toSend += " " + Package.byteToHexString(b);
+//            toSend = SEND_CONST + toSend + " " + Package.byteToHexString(controlSumm);
+//        }
+//        Log.d(TAG, toSend);
+//        Platform2 p2 = new Platform2(toSend, "456767654345");
+//        p2.saveToFile("test2.bin");
+//        p2.setServerAnswerListener(this);
+//        try {
+//            p2.send(this);
+//        } catch (NoInternetConnectionException e) {
+//            e.printStackTrace();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -77,42 +115,52 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
     }
 
     @Override
-    public void onSearchFinished() {
+    public void onBtSearchFinished() {
 
     }
 
     @Override
-    public void onSearchError(String text) {
+    public void onBtSearchError(String text) {
 
     }
 
     @Override
-    public void oDataSent() {
+    public void onBtDataSent() {
 
     }
 
     @Override
-    public void onReceiveData(merloni.android.washer.model.Package pack) {
+    public void onBtReceiveData(merloni.android.washer.model.Package pack) {
 
     }
 
     @Override
-    public void onDataSendingError(String text) {
+    public void onBtDataSendingError(String text) {
 
     }
 
     @Override
-    public void onGeneralError(String text) {
+    public void onBtGeneralError(String text) {
 
     }
 
     @Override
-    public void onDeviceDisconnected() {
+    public void onBtDeviceDisconnected() {
 
     }
 
     @Override
-    public void onDeviceConnected() {
+    public void onBtDeviceConnected() {
+
+    }
+
+    @Override
+    public void onServerError(Sendable caller, String message) {
+
+    }
+
+    @Override
+    public void onServerLoaded(Sendable caller, boolean ok) {
 
     }
 }
