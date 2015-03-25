@@ -7,6 +7,11 @@ import android.util.Log;
  */
 public class Package {
 
+    public static final int MODE_START = 0;
+    public static final int MODE_SIZE = 1;
+    public static final int MODE_SERIAL = 2;
+    public int mode = MODE_START;
+
     private static final String TAG = Package.class.getSimpleName();
     final protected static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
@@ -43,6 +48,40 @@ public class Package {
         return result;
     }
 
+    public static int bytesToInt(byte[] bytes) {
+        int result = 0;
+        int size = bytes.length;
+        int cur = 1;
+        for (int i = 0; i < size; i++) {
+//            Log.d(TAG, "Cur byte to int: " + getUnsignedByte(bytes[size - i - 1]));
+            result += cur * getUnsignedByte(bytes[size - i - 1]);
+            cur *= 256;
+        }
+        return result;
+    }
+
+    public static byte[] intToBytes(int value) {
+        boolean ok = true;
+        int length = 1;
+        int cur = 256;
+        while (ok) {
+            if (value / cur == 0) {
+                ok = false;
+            } else {
+                cur *= 256;
+                length++;
+            }
+        }
+        byte[] result = new byte[length];
+        cur = 1;
+        for (int i = 0; i < length; i++) {
+            result[length - i - 1] = (byte)(value % 256);
+            cur *= 256;
+            value /= cur;
+        }
+        return result;
+    }
+
     public static String bytesToHexString(byte[] bytes, int offset, int length) {
         char[] hexChars = new char[length * 3];
         for ( int j = 0; j < length; j++ ) {
@@ -75,8 +114,22 @@ public class Package {
         return new String(hexChars);
     }
 
+    public static String getControlSum(String value) {
+        byte controlSum = 0;
+        byte[] bytes = Package.hexStringToBytes(value);
+        for (int i = 0; i < bytes.length; i++) {
+            controlSum += bytes[i];
+        }
+        bytes = new byte[1];
+        bytes[0] = controlSum;
+        return bytesToHexString(bytes, 0, 1);
+    }
+
     public String getStringToSend() {
         return stringToSend;
     }
 
+    public static int getUnsignedByte(byte b) {
+        return ((int)b + 256) % 256;
+    }
 }

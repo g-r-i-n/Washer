@@ -24,6 +24,9 @@ public class Program extends BaseObject implements BTManager.BluetoothExchangeLi
 
     private static final String TAG = Program.class.getSimpleName();
 
+    public String startPack;
+    public String serialPack;
+
     public Context context;
 
     protected String sendConst;
@@ -31,7 +34,7 @@ public class Program extends BaseObject implements BTManager.BluetoothExchangeLi
     byte controlSummBaseConst;
     final static int packsAmount = 16 * 256 / 64;
 
-    private static final String SEND_CONST = "a5 ee 02 91 30 05 a0";
+//    private static final String SEND_CONST = "a5 ee 02 91 30 05 a0";
 
     private String toSend = "";
     protected Package[] packs;
@@ -44,6 +47,10 @@ public class Program extends BaseObject implements BTManager.BluetoothExchangeLi
         sendPost = true;
         pageAddress = "/android.php";
         parameters = "emai=" + imei + "&firmware=";
+    }
+
+    public void startRead() {
+
     }
 
     public void prepareToSend() {
@@ -74,7 +81,7 @@ public class Program extends BaseObject implements BTManager.BluetoothExchangeLi
         b = (byte)(((number + 1) * 64 - 1) / 256);
         controlSumm += b;
         result += " " + Package.byteToHexString(b);
-        result = SEND_CONST + result + " " + Package.byteToHexString(controlSumm);
+        result = sendConst + result + " " + Package.byteToHexString(controlSumm);
         Log.d(TAG, "To send: " + result);
         return result;
     }
@@ -97,35 +104,35 @@ public class Program extends BaseObject implements BTManager.BluetoothExchangeLi
     @Override
     public void onBtReceiveData(Package pack) {
         Log.d(TAG, "Received: " + pack.stringToRead);
-        toSend += " " + pack.stringToRead;
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                dataView.setText(dataView.getText().toString() + pack.stringToRead + "\n");
+//        toSend += " " + pack.stringToRead;
+////        runOnUiThread(new Runnable() {
+////            @Override
+////            public void run() {
+////                dataView.setText(dataView.getText().toString() + pack.stringToRead + "\n");
+////            }
+////        });
+//        curPackNumber++;
+//        if (curPackNumber < packsAmount + firstPacksAmount + 3) {
+//            WasherManager.getInstance().sendPackage(packs[curPackNumber]);
+//        } else {
+//            try {
+//                Log.d(TAG, "Firmware: " + toSend);
+//                toSend = toSend.replace(" ", "");
+//                saveToFile("test.txt");
+//                send(context);
+//                setServerAnswerListener((ServerAnswerListener)context);
+//            } catch (NoInternetConnectionException e) {
+//                e.printStackTrace();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
 //            }
-//        });
-        curPackNumber++;
-        if (curPackNumber < packsAmount + firstPacksAmount + 3) {
-            WasherManager.getInstance().sendPackage(packs[curPackNumber]);
-        } else {
-            try {
-                Log.d(TAG, "Firmware: " + toSend);
-                toSend = toSend.replace(" ", "");
-                saveToFile("test.txt");
-                send(context);
-                setServerAnswerListener((ServerAnswerListener)context);
-            } catch (NoInternetConnectionException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    dataView.setText(dataView.getText().toString() + pack.stringToRead + "\nFINISH!");
-//                }
-//            });
-        }
+////            runOnUiThread(new Runnable() {
+////                @Override
+////                public void run() {
+////                    dataView.setText(dataView.getText().toString() + pack.stringToRead + "\nFINISH!");
+////                }
+////            });
+//        }
     }
 
     @Override

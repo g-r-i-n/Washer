@@ -7,7 +7,13 @@
     <string name="connect">Переподключиться</string>
     <string name="search">Искать</string>
     <string name="bt_not_supported">Bluetooth недоступен на этом устройстве</string>
+    <string name="bt_not_connected">Не удалось подключиться к удаленному устройству</string>
     <string name="choose_file">Выберите файл прошивки</string>
     <string name="install_fm">Установите файловый менеджер</string>
+    <string name="model">Модель: </string>
+    <string name="code">Код прошивки: </string>
+    <string name="serial">Серийный номер: </string>
+    <string name="ready">Готов!</string>
+    <string name="stats">Статистика</string>
 
 </resources>
