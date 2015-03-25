@@ -36,7 +36,7 @@ public class Platform3 extends Program {
 
     public Platform3(String toSend, String imei) {
         super(toSend, imei);
-        startPack = "a5 ee 02 95 49 02 90 20 25";
+        startPack = "a5 ee 02 95 49 02 90 24 25";
         sendConst = "a5 ee 02 93 10 05 90";
         bytes = Package.hexStringToBytes(sendConst);
         controlSummBaseConst = (byte)(bytes[0] + bytes[1] + bytes[2] + bytes[3] + bytes[4] + bytes[5] + bytes[6]);

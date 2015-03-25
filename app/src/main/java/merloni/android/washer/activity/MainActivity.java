@@ -54,13 +54,13 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
 ////                intent.putExtra("mac", mac);
 //                startActivity(intent);
                 BTManager.getInstance().listener = program;
-///                program.startRead();
-Program program = new Platform3("", "");
-program.context = MainActivity.this;
-Package pack = new Package("");
-pack.mode = Package.MODE_SIZE;
-pack.stringToRead = "5a a5 ee 02 93 1a 02 0b be 0d";
-program.onBtReceiveData(pack);
+                program.startRead();
+//Program program = new Platform3("", "");
+//program.context = MainActivity.this;
+//Package pack = new Package("");
+//pack.mode = Package.MODE_SIZE;
+//pack.stringToRead = "5a a5 ee 02 93 1a 02 0b be 0d";
+//program.onBtReceiveData(pack);
             }
         });
 //        findViewById(R.id.connect).setOnClickListener(new View.OnClickListener() {

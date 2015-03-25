@@ -46,7 +46,7 @@ public class Program extends BaseObject implements BTManager.BluetoothExchangeLi
         BTManager.getInstance().listener = this;
         sendPost = true;
         pageAddress = "/android.php";
-        parameters = "emai=" + imei + "&firmware=";
+        parameters = "?imei=" + imei;
     }
 
     public void startRead() {

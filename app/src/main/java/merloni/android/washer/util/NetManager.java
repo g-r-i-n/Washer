@@ -30,8 +30,8 @@ public class NetManager {
 
     private static final String TAG = NetManager.class.getSimpleName();
 	
-//	public static final String SERVER_ADDRESS = "sw19.ru/online/scanmerloni/android.php";
-public static final String SERVER_ADDRESS = "http://10.0.2.2/washer";
+	public static final String SERVER_ADDRESS = "http://sw19.ru/online/scanmerloni";
+//public static final String SERVER_ADDRESS = "http://10.0.2.2/washer";
 	protected static final int DEFAULT_BUILDER_CAPACITY = 65536;
 	public static final int SOCKET_TIMEOUT_IN_MILLIS = 10000;
 	public static final int CONNECTION_TIMEOUT_IN_MILLIS = 10000;

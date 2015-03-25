@@ -415,6 +415,13 @@ public class BTManager implements AbstractManager {
         }
         if (connectedThread != null) {
             connectedThread.cancel();
+            try {
+                connectedThread.mmInStream.close();
+                connectedThread.mmOutStream.close();
+                connectedThread.mmSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             connectedThread = null;
         }
         if (acceptThread != null) {
