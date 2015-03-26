@@ -431,6 +431,7 @@ public class BTManager implements AbstractManager {
     }
 
     public void sendPackage(merloni.android.washer.model.Package pack) {
+        Log.d(TAG, "Sending: " + pack.getStringToSend());
         curPackage = pack;
         sendToCurrentDevice(curPackage.bytesToSend);
     }
