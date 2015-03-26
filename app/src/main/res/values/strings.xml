@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Washer</string>
-    <string name="read">Считать</string>
+    <string name="save">Сохранить</string>
     <string name="write">Записать</string>
     <string name="send">Отправить</string>
     <string name="connect">Переподключиться</string>

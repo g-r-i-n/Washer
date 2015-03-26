@@ -3,12 +3,9 @@ package merloni.android.washer.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,9 +13,6 @@ import merloni.android.washer.R;
 import merloni.android.washer.model.*;
 import merloni.android.washer.model.Package;
 import merloni.android.washer.util.BTManager;
-import merloni.android.washer.util.FIle;
-import merloni.android.washer.util.FilesManager;
-import merloni.android.washer.util.NoInternetConnectionException;
 import merloni.android.washer.util.ServerAnswerListener;
 import merloni.android.washer.util.WasherManager;
 
@@ -47,7 +41,7 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
                 startActivity(new Intent(MainActivity.this, WriteActivity.class));
             }
         });
-        findViewById(R.id.read).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Intent intent = new Intent(MainActivity.this, ReadActivity.class);
