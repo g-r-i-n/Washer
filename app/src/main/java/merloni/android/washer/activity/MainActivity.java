@@ -213,6 +213,10 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
         Log.d(TAG, "Pack: " + pack.stringToRead);
         answerReceived = true;
         if (pack.mode == Package.MODE_START) {
+            Package p = new Package("a5 ee 02 95 49 02 90 20 25");
+            p.mode = Package.MODE_START2;
+            WasherManager.getInstance().sendPackage(p);
+        } if (pack.mode == Package.MODE_START2) {
             BTManager.getInstance().listener = program;
             program.startRead();
         }
