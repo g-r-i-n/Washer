@@ -10,6 +10,9 @@ public class Package {
     public static final int MODE_START = 0;
     public static final int MODE_SIZE = 1;
     public static final int MODE_SERIAL = 2;
+    public static final int MODE_FIRMWARE_NAME = 3;
+    public static final int MODE_MODEL = 4;
+    public static final int MODE_FIRMWARE = 5;
     public int mode = MODE_START;
 
     private static final String TAG = Package.class.getSimpleName();

@@ -53,14 +53,16 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
 //                Intent intent = new Intent(MainActivity.this, ReadActivity.class);
 ////                intent.putExtra("mac", mac);
 //                startActivity(intent);
-                BTManager.getInstance().listener = program;
-///                program.startRead();
-Program program = new Platform3("", "");
-program.context = MainActivity.this;
-Package pack = new Package("");
-pack.mode = Package.MODE_SIZE;
-pack.stringToRead = "5a a5 ee 02 93 1a 02 0b be 0d";
-program.onBtReceiveData(pack);
+
+//                BTManager.getInstance().listener = program;
+//                program.startRead();
+
+//Program program = new Platform3("", "");
+//program.context = MainActivity.this;
+//Package pack = new Package("");
+//pack.mode = Package.MODE_SIZE;
+//pack.stringToRead = "5a a5 ee 02 93 1a 02 0b be 0d";
+//program.onBtReceiveData(pack);
             }
         });
 //        findViewById(R.id.connect).setOnClickListener(new View.OnClickListener() {
@@ -127,11 +129,12 @@ program.onBtReceiveData(pack);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                String result = getResources().getString(R.string.ready);
-                                if (!answerReceived) {
-                                    result = getResources().getString(R.string.bt_not_connected);
+                                if (answerReceived) {
+                                    BTManager.getInstance().listener = program;
+                                    program.startRead();
+                                } else {
+                                    ((TextView)findViewById(R.id.stats)).setText(getResources().getString(R.string.bt_not_connected));
                                 }
-                                ((TextView)findViewById(R.id.stats)).setText(result);
                             }
                         });
                     }

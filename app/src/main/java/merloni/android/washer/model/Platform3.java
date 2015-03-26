@@ -34,6 +34,8 @@ public class Platform3 extends Program {
 
     private Package pack;
 
+    private int proshSize;
+
     public Platform3(String toSend, String imei) {
         super(toSend, imei);
         startPack = "a5 ee 02 95 49 02 90 20 25";
@@ -54,26 +56,42 @@ public class Platform3 extends Program {
     @Override
     public void onBtReceiveData(Package pack) {
         Log.d(TAG, "Received: " + pack.stringToRead);
-        String data = "";
         if (pack.mode == Package.MODE_SIZE) {
-            data = sendConst;
             String l = pack.stringToRead.substring(21, 26);
             Log.d(TAG, "Length: " + l);
-            int value = Package.bytesToInt(Package.hexStringToBytes(l));
-//            Log.d(TAG, "Value: " + (value));
-            value = value * 2 - Package.bytesToInt(Package.hexStringToBytes("05 f8"));
-            byte[] bytes = Package.intToBytes(value);
-            data += " " + Package.bytesToHexString(bytes, 0, bytes.length);
-            byte b = bytes[bytes.length - 1];
-            bytes = new byte[1];
-            bytes[0] = (byte)(b + 5);
-            data += " " + Package.bytesToHexString(bytes, 0, 1) + " 03";
-            data += " " + Package.getControlSum(data);
-            Log.d(TAG, "Request for serial: " + data);
-            pack = new Package(data);
+            proshSize = Package.bytesToInt(Package.hexStringToBytes(l));
+            String zapros = getData(proshSize, "05 f8", 5);
+            Log.d(TAG, "Request for serial: " + zapros);
+            pack = new Package(zapros);
             pack.mode = Package.MODE_SERIAL;
             WasherManager.getInstance().sendPackage(pack);
+        } else if (pack.mode == Package.MODE_SERIAL) {
+            String zapros = getData(proshSize, "05 f2", 5);
+            Log.d(TAG, "Request for firmware: " + zapros);
+            pack = new Package(zapros);
+            pack.mode = Package.MODE_FIRMWARE_NAME;
+            WasherManager.getInstance().sendPackage(pack);
+        } else if (pack.mode == Package.MODE_FIRMWARE_NAME) {
+            String zapros = getData(proshSize, "05 ec", 13);
+            Log.d(TAG, "Request for firmware: " + zapros);
+            pack = new Package(zapros);
+            pack.mode = Package.MODE_MODEL;
+            WasherManager.getInstance().sendPackage(pack);
+        } else if (pack.mode == Package.MODE_MODEL) {
         }
+    }
+
+    private String getData(int value, String offset, int length) {
+        String data = sendConst;
+        value = value * 2 - Package.bytesToInt(Package.hexStringToBytes(offset));
+        byte[] bytes = Package.intToBytes(value);
+        data += " " + Package.bytesToHexString(bytes, 0, bytes.length);
+        byte b = bytes[bytes.length - 1];
+        bytes = new byte[1];
+        bytes[0] = (byte)(b + length);
+        data += " " + Package.bytesToHexString(bytes, 0, 1) + " 03";
+        data += " " + Package.getControlSum(data);
+        return data;
     }
 
     public void prepareToSend() {
