@@ -15,5 +15,6 @@
     <string name="serial">Серийный номер: </string>
     <string name="ready">Готов!</string>
     <string name="stats">Статистика</string>
+    <string name="read">Считать</string>
 
 </resources>

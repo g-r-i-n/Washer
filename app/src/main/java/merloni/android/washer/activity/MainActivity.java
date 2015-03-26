@@ -3,6 +3,7 @@ package merloni.android.washer.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,12 +36,19 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.write).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WriteActivity.class));
-            }
-        });
+
+        findViewById(R.id.read).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               program = new Platform3("", "");
+               program.context = MainActivity.this;
+               Package pack = new Package(program.startPack);
+               pack.mode = Package.MODE_START;
+               WasherManager.getInstance().sendPackage(pack);
+           }
+       });
+
+
         findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +67,14 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
 //program.onBtReceiveData(pack);
             }
         });
+
+        findViewById(R.id.write).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+
 //        findViewById(R.id.connect).setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -110,30 +126,54 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
                 name = data.getStringExtra("name");
                 BTManager.getInstance().listener = this;
                 BTManager.getInstance().setCurrentDevice(mac);
-
                 BTManager.getInstance().startClientMode();
-                program = new Platform3("", "");
-                program.context = this;
-                Package pack = new Package(program.startPack);
-                pack.mode = Package.MODE_START;
-                WasherManager.getInstance().sendPackage(pack);
-                TimerTask tt = new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (answerReceived) {
-                                    BTManager.getInstance().listener = program;
-                                    program.startRead();
-                                } else {
-                                    ((TextView)findViewById(R.id.stats)).setText(getResources().getString(R.string.bt_not_connected));
-                                }
-                            }
-                        });
-                    }
-                };
-                new Timer().schedule(tt, 1000);
+//                program = new Platform3("", "");
+//                program.context = this;
+//                Package pack = new Package(program.startPack);
+//                pack.mode = Package.MODE_START;
+//                WasherManager.getInstance().sendPackage(pack);
+//                TimerTask tt = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Log.d(TAG, "Reading started!!!");
+//                                if (answerReceived) {
+//                                    BTManager.getInstance().listener = program;
+//                                    program.startRead();
+//                                } else {
+//                                    ((TextView)findViewById(R.id.stats)).setText(getResources().getString(R.string.bt_not_connected));
+//                                }
+//                            }
+//                        });
+//                    }
+//                };
+//                new Timer().schedule(tt, 1000);
+            } else {
+//                program = new Platform3("", "");
+//                program.context = MainActivity.this;
+//                Package pack = new Package(program.startPack);
+//                pack.mode = Package.MODE_START;
+//                WasherManager.getInstance().sendPackage(pack);
+//                TimerTask tt = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Log.d(TAG, "Reading started!!!");
+//                                if (answerReceived) {
+//                                    BTManager.getInstance().listener = program;
+//                                    program.startRead();
+//                                } else {
+//                                    ((TextView)findViewById(R.id.stats)).setText(getResources().getString(R.string.bt_not_connected));
+//                                }
+//                            }
+//                        });
+//                    }
+//                };
+//                new Timer().schedule(tt, 1000);
             }
         }
     }
@@ -170,7 +210,12 @@ public class MainActivity extends Activity implements BTManager.BluetoothExchang
 
     @Override
     public void onBtReceiveData(merloni.android.washer.model.Package pack) {
+        Log.d(TAG, "Pack: " + pack.stringToRead);
         answerReceived = true;
+        if (pack.mode == Package.MODE_START) {
+            BTManager.getInstance().listener = program;
+            program.startRead();
+        }
     }
 
     @Override

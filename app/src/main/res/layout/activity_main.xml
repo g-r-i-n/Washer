@@ -12,8 +12,15 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dist_2"
         android:layout_alignParentBottom="true"
-        android:weightSum="2"
+        android:weightSum="3"
         android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/read"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/read"/>
 
         <Button
             android:id="@+id/save"
